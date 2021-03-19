@@ -1,8 +1,12 @@
 let size = 10;
 let TIMER = 80;
 let canvas = document.querySelector("canvas");
+let pointsCounter = document.querySelector(".points-counter");
+console.log(pointsCounter);
+let canvasSIze = 500;
 let ctx = canvas.getContext("2d");
 let direction;
+let points = 0;
 
 const DIRECTION = {
   ArrowRight: [1, 0],
@@ -19,7 +23,12 @@ const DIRECTION = {
   w: [0, -1],
 };
 
-let controller = { movimiento: { x: 1, y: 0 }, snake: [{ x: 0, y: 0 }] };
+let controller = {
+  movimiento: { x: 1, y: 0 },
+  snake: [{ x: 0, y: 0 }],
+  fruit: { x: 0, y: 250 },
+  playing: false,
+};
 
 document.onkeydown = (e) => {
   direction = DIRECTION[e.key];
@@ -32,23 +41,66 @@ document.onkeydown = (e) => {
 
 const looper = () => {
   let head = controller.snake[0];
+  let chased = head.x === controller.fruit.x && head.y === controller.fruit.y;
   let dirX = controller.movimiento.x;
   let dirY = controller.movimiento.y;
   head.x += dirX;
   head.y += dirY;
 
+  if (chased) {
+    newPosition();
+  }
+
   requestAnimationFrame(render);
 
   setTimeout(looper, TIMER);
 };
+console.log(points);
 
-let render = (color) => {
-  ctx.clearRect(0, 0, 500, 500);
-  let head = controller.snake[0];
-  ctx.fillStyle = "green";
-  ctx.fillRect(head.x * size, head.y * size, size, size);
+const newPosition = () => {
+  newFruitPosition = randomPosition();
+  let fruit = controller.fruit;
+  fruit.x = newFruitPosition.x;
+  fruit.y = newFruitPosition.y;
+  points++;
+  pointsCounter.innerHTML = `${points}`;
+};
+
+let render = () => {
+  ctx.clearRect(0, 0, canvasSIze, canvasSIze);
+  let snake = controller.snake[0];
+  let fruit = controller.fruit;
+  createObjects("green", snake.x, snake.y);
+  createObjects("orange", fruit.x, fruit.y);
+};
+
+let createObjects = (color, x, y) => {
+  ctx.fillStyle = color;
+  ctx.fillRect(x * size, y * size, size, size);
+};
+
+const randomPosition = () => {
+  let direction = Object.values(DIRECTION);
+  return {
+    x: parseInt(Math.floor(Math.random() * (35 - 10)) + 10),
+    y: parseInt(Math.floor(Math.random() * (35 - 10)) + 10),
+    d: direction[parseInt(Math.random() * 11)],
+  };
 };
 
 window.onload = () => {
+  direction = randomPosition();
+
+  let head = controller.snake[0];
+  head.x = direction.x;
+  head.y = direction.y;
+  controller.movimiento.x = direction.d[0];
+  controller.movimiento.y = direction.d[1];
+
+  fruitPosition = randomPosition();
+  let fruit = controller.fruit;
+  fruit.x = fruitPosition.x;
+  fruit.y = fruitPosition.y;
+
   looper();
 };
