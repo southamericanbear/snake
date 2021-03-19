@@ -2,7 +2,6 @@ let size = 10;
 let TIMER = 80;
 let canvas = document.querySelector("canvas");
 let pointsCounter = document.querySelector(".points-counter");
-console.log(pointsCounter);
 let canvasSIze = 500;
 let ctx = canvas.getContext("2d");
 let direction;
@@ -28,6 +27,7 @@ let controller = {
   snake: [{ x: 0, y: 0 }],
   fruit: { x: 0, y: 250 },
   playing: false,
+  grow: 0,
 };
 
 document.onkeydown = (e) => {
@@ -40,22 +40,40 @@ document.onkeydown = (e) => {
 };
 
 const looper = () => {
-  let head = controller.snake[0];
+  const head = controller.snake[0];
+  let tail = {};
+  Object.assign(tail, controller.snake[controller.snake.length - 1]);
   let chased = head.x === controller.fruit.x && head.y === controller.fruit.y;
   let dirX = controller.movimiento.x;
   let dirY = controller.movimiento.y;
-  head.x += dirX;
-  head.y += dirY;
+  let snakeSize = controller.snake.length - 1;
+
+  for (let i = snakeSize; i > -1; i--) {
+    const head = controller.snake[i];
+
+    if (i === 0) {
+      head.x += dirX;
+      head.y += dirY;
+    } else {
+      head.x = controller.snake[i - 1].x;
+      head.y = controller.snake[i - 1].y;
+    }
+  }
 
   if (chased) {
+    controller.grow += 1;
     newPosition();
+  }
+
+  if (controller.grow > 0) {
+    controller.snake.push(tail);
+    controller.grow -= 1;
   }
 
   requestAnimationFrame(render);
 
   setTimeout(looper, TIMER);
 };
-console.log(points);
 
 const newPosition = () => {
   newFruitPosition = randomPosition();
@@ -68,9 +86,13 @@ const newPosition = () => {
 
 let render = () => {
   ctx.clearRect(0, 0, canvasSIze, canvasSIze);
-  let snake = controller.snake[0];
   let fruit = controller.fruit;
-  createObjects("green", snake.x, snake.y);
+
+  for (i = 0; i < controller.snake.length; i++) {
+    const { x, y } = controller.snake[i];
+    createObjects("green", x, y);
+  }
+
   createObjects("orange", fruit.x, fruit.y);
 };
 
