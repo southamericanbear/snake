@@ -6,6 +6,10 @@ let canvasSIze = 500;
 let ctx = canvas.getContext("2d");
 let direction;
 let points = 0;
+let level = 1;
+let eatFruitAudio = document.getElementById("fruitAudio");
+let loseAudio = document.getElementById("loseAudio");
+let gameOver = document.querySelector(".game-over");
 
 // 1) We create this variable with all the controlls that we can use in the game. This controls are fired with `document.onkeydown`.
 const DIRECTION = {
@@ -48,6 +52,7 @@ document.onkeydown = (e) => {
 
 // 4)Looper is a function that like his name says it's a loop, in this function we do things like create the head of the snake, create the tail, asign the direction of the snake, check if the snake is eating the fruits, make the snake grow(in some part) between another things, this function is posible because we use the setTimeout in the last line calling the function againt and setting the time with the variable TIME.
 const looper = () => {
+  if (!controller.playing) return;
   // Here we get the head of the snake taking the firs position of the array of coordinates.
   const head = controller.snake[0];
   // This empty object is the tail, is filled with the length of the snake, for example everytime the snake eats a fruit in controller.snake: its added a new object, that object is passed to the tail.
@@ -55,6 +60,14 @@ const looper = () => {
   Object.assign(tail, controller.snake[controller.snake.length - 1]);
   // this is simple, if the head is in the same position of x and y as the fruit, the fruit it's chased ;), oooh almost forgot to said this, chased hold a boolean in false that changes to true when the snake chase a fruit
   let chased = head.x === controller.fruit.x && head.y === controller.fruit.y;
+
+  // Here we check if the function detectCrash() is true, if thar it's correct it will pass playing back again to false, set the innerHtml of pointsCounter with a new message and make the snake disappear from the screen
+  if (detectCrash()) {
+    loseAudio.play();
+    pointsCounter.classList.add("hide");
+    gameOver.classList.remove("hide");
+    controller.playing = false;
+  }
   // Do you remember in 'onkeydown' that we pass the value of x and y to the controller.movimiento? well now we pass that value into a new variables that gave us the position to render of the snake and his body.
   let dirX = controller.movimiento.x;
   let dirY = controller.movimiento.y;
@@ -63,16 +76,17 @@ const looper = () => {
 
   // What does this loop? well it's a little tricky you know? Even I don't understand very well the logic but well, it's works.
   // The for loop runs in backward through the array of objects that snakesize is and gave back the head, then we chake if the index of the array is 0 the computer will add the value of dirX to head.x and the same for head.y and dirY, else we will pass the position of the index -1 of the snake array into the head and here is where the magic happens!
+  if (controller.playing) {
+    for (let i = snakeSize; i > -1; i--) {
+      const head = controller.snake[i];
 
-  for (let i = snakeSize; i > -1; i--) {
-    const head = controller.snake[i];
-
-    if (i === 0) {
-      head.x += dirX;
-      head.y += dirY;
-    } else {
-      head.x = controller.snake[i - 1].x;
-      head.y = controller.snake[i - 1].y;
+      if (i === 0) {
+        head.x += dirX;
+        head.y += dirY;
+      } else {
+        head.x = controller.snake[i - 1].x;
+        head.y = controller.snake[i - 1].y;
+      }
     }
   }
 
@@ -80,6 +94,7 @@ const looper = () => {
 
   if (chased) {
     controller.grow += 1;
+    eatFruitAudio.play();
     newPosition();
   }
 
@@ -89,10 +104,30 @@ const looper = () => {
     controller.snake.push(tail);
     controller.grow -= 1;
   }
-
   requestAnimationFrame(render);
 
   setTimeout(looper, TIMER);
+};
+
+// 10) This function checks is the head of the snake crash against the walls if thar happens it returns a boolean in true
+const detectCrash = () => {
+  let head = controller.snake[0];
+  // We check here if the head of the snake it's out of the bounderies of the canvas, if that it's correct GAME OVER!
+  if (
+    head.x < 0 ||
+    head.x >= canvasSIze / size ||
+    head.y >= canvasSIze / size ||
+    head.y < 0
+  ) {
+    return true;
+  }
+  // Also we check if the snake touchs himself, if that happens you know... GAME OVER!
+  for (i = 1; i < controller.snake.length; i++) {
+    let snakeHead = controller.snake[i];
+    if (snakeHead.x === head.x && snakeHead.y === head.y) {
+      return true;
+    }
+  }
 };
 
 // 9) here we create the new position for the fruit this funcion grab a random number from the random position, then pass it into x and y from fruit and theeeeeen oh man I almos foget it, the game have an wait for it... POINTS COUNTER, so here we add a new point to the counter and then we render those points into the html
@@ -102,7 +137,29 @@ const newPosition = () => {
   fruit.x = newFruitPosition.x;
   fruit.y = newFruitPosition.y;
   points++;
-  pointsCounter.innerHTML = `${points}`;
+  pointsCounter.innerHTML = `Level: ${level} Points: ${points}`;
+  if (points === 3) {
+    TIMER = 70;
+  }
+  if (points === 7) {
+    TIMER = 60;
+    level = 2;
+  }
+  if (points === 15) {
+    TIMER = 50;
+    level = 3;
+  }
+  if (points === 20) {
+    TIMER = 40;
+    level = 4;
+  }
+  if (points === 25) {
+    TIMER = 30;
+    level = 5;
+  }
+  if (points === 35) {
+    level = 6;
+  }
 };
 
 // 5) Render makes the objects shows up in the screen
@@ -138,8 +195,17 @@ const randomPosition = () => {
   };
 };
 
-// 6) Here it's where everything start
-window.onload = () => {
+let startOver = () => {
+  TIMER = 80;
+  level = 1;
+  points = 0;
+  controller = {
+    movimiento: { x: 1, y: 0 },
+    snake: [{ x: 0, y: 0 }],
+    fruit: { x: 0, y: 250 },
+    playing: false,
+    grow: 0,
+  };
   // here we gave a random direction for the head of the snake
   direction = randomPosition();
 
@@ -156,6 +222,18 @@ window.onload = () => {
   let fruit = controller.fruit;
   fruit.x = fruitPosition.x;
   fruit.y = fruitPosition.y;
-  // we call looper and the party starts
-  looper();
+  // we call looper and the party starts and pass playing to true
+  controller.playing = true;
 };
+
+// 6) Here it's where everything start
+
+document.addEventListener("keypress", () => {
+  gameOver.classList.add("hide");
+  const title = document.querySelector("h1");
+  title.classList.add("hide");
+  pointsCounter.classList.remove("hide");
+  startOver();
+  pointsCounter.innerHTML = `Level: ${level} Points: ${points}`;
+  looper();
+});
