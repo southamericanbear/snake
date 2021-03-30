@@ -113,12 +113,7 @@ const looper = () => {
 const detectCrash = () => {
   let head = controller.snake[0];
   // We check here if the head of the snake it's out of the bounderies of the canvas, if that it's correct GAME OVER!
-  if (
-    head.x < 0 ||
-    head.x >= canvasSIze / size ||
-    head.y >= canvasSIze / size ||
-    head.y < 0
-  ) {
+  if (head.x < 0 || head.x >= 40 || head.y >= 40 || head.y < 0) {
     return true;
   }
   // Also we check if the snake touchs himself, if that happens you know... GAME OVER!

@@ -40,3 +40,22 @@ h1 {
 .hide {
   display: none;
 }
+
+.keys {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  canvas {
+    width: 70%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .keys {
+    display: flex;
+    color: white;
+    border: solid red 1px;
+    justify-content: space-between;
+  }
+}
