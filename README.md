@@ -11,5 +11,6 @@
 <span>The game was builded in <b>Vanilla JS</b> and if you play it with your phone(or check it with the devtools) you
     are gonna to find a special easter egg from the 90's</span>
 
+<a href="https://github.com/southamericanbear/snake">CHECK THE GAME HERE</a>
 
 <B>CHEEERSSSSS!!!!!</B>
