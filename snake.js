@@ -62,14 +62,17 @@ keyUp.addEventListener("click", () => {
   controller.movimiento.x = 0;
   controller.movimiento.y = -1;
 });
+
 keyRight.addEventListener("click", () => {
   controller.movimiento.x = 1;
   controller.movimiento.y = 0;
 });
+
 keyDown.addEventListener("click", () => {
   controller.movimiento.x = 0;
   controller.movimiento.y = 1;
 });
+
 keyLeft.addEventListener("click", () => {
   controller.movimiento.x = -1;
   controller.movimiento.y = 0;
