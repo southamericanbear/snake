@@ -10,6 +10,14 @@ let level = 1;
 let eatFruitAudio = document.getElementById("fruitAudio");
 let loseAudio = document.getElementById("loseAudio");
 let gameOver = document.querySelector(".game-over");
+let keyUp = document.querySelector(".keyUp");
+let keyRight = document.querySelector(".keyRight");
+let keyDown = document.querySelector(".keyDown");
+let keyLeft = document.querySelector(".keyLeft");
+let start = document.querySelector(".start-span");
+let levelNumberSpan = document.querySelector(".level-number");
+let pointsSpanNumber = document.querySelector(".points-number");
+let finalScore = document.querySelector(".final-score");
 
 // 1) We create this variable with all the controlls that we can use in the game. This controls are fired with `document.onkeydown`.
 const DIRECTION = {
@@ -50,6 +58,23 @@ document.onkeydown = (e) => {
   }
 };
 
+keyUp.addEventListener("click", () => {
+  controller.movimiento.x = 0;
+  controller.movimiento.y = -1;
+});
+keyRight.addEventListener("click", () => {
+  controller.movimiento.x = 1;
+  controller.movimiento.y = 0;
+});
+keyDown.addEventListener("click", () => {
+  controller.movimiento.x = 0;
+  controller.movimiento.y = 1;
+});
+keyLeft.addEventListener("click", () => {
+  controller.movimiento.x = -1;
+  controller.movimiento.y = 0;
+});
+
 // 4)Looper is a function that like his name says it's a loop, in this function we do things like create the head of the snake, create the tail, asign the direction of the snake, check if the snake is eating the fruits, make the snake grow(in some part) between another things, this function is posible because we use the setTimeout in the last line calling the function againt and setting the time with the variable TIME.
 const looper = () => {
   if (!controller.playing) return;
@@ -65,6 +90,7 @@ const looper = () => {
   if (detectCrash()) {
     loseAudio.play();
     pointsCounter.classList.add("hide");
+    finalScore.innerHTML = `Your final score is : ${points}`;
     gameOver.classList.remove("hide");
     controller.playing = false;
   }
@@ -132,7 +158,8 @@ const newPosition = () => {
   fruit.x = newFruitPosition.x;
   fruit.y = newFruitPosition.y;
   points++;
-  pointsCounter.innerHTML = `Level: ${level} Points: ${points}`;
+  levelNumberSpan.innerHTML = `${level}`;
+  pointsSpanNumber.innerHTML = `${points}`;
   if (points === 3) {
     TIMER = 70;
   }
@@ -223,12 +250,26 @@ let startOver = () => {
 
 // 6) Here it's where everything start
 
-document.addEventListener("keypress", () => {
+document.body.onkeyup = (e) => {
+  if (e.keyCode == 32) {
+    gameOver.classList.add("hide");
+    const title = document.querySelector("h1");
+    title.classList.add("hide");
+    pointsCounter.classList.remove("hide");
+    startOver();
+    levelNumberSpan.innerHTML = ` ${level}`;
+    pointsSpanNumber.innerHTML = ` ${points}`;
+    looper();
+  }
+};
+
+start.addEventListener("click", () => {
   gameOver.classList.add("hide");
   const title = document.querySelector("h1");
   title.classList.add("hide");
   pointsCounter.classList.remove("hide");
   startOver();
-  pointsCounter.innerHTML = `Level: ${level} Points: ${points}`;
+  levelNumberSpan.innerHTML = `${level} `;
+  pointsSpanNumber.innerHTML = `${points}`;
   looper();
 });

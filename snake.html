@@ -6,26 +6,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="snake.css">
+    <script src="https://kit.fontawesome.com/fa5117c01c.js" crossorigin="anonymous"></script>
+
+
     <title>Snake</title>
 </head>
 
 <body>
-    <audio id='fruitAudio' src="audios/fruiteat.wav"></audio>
-    <audio id='loseAudio' src="audios/lose.wav"></audio>
-    <div class="title">
-        <h1>Press any key to start!</h1>
-    </div>
-    <div class="game-over hide">
-        <h1>GAME OVER!</h1>
-        <H4>Press any key to restore the game</H4>
-    </div>
-    <div class="points-counter hide"><span>Level:</span><span>1 </span><span>points: </span> <span>0</span></div>
-    <canvas width="400px" height="400px"></canvas>
-    <div class="keys">
-        <div class="keyUp">UP</div>
-        <div class="keyRight">RIGHT</div>
-        <div class="keyDown">DOWN</div>
-        <div class="keyLeft">LEFT</div>
+    <div class="game-boy">
+        <audio id='fruitAudio' src="audios/fruiteat.wav"></audio>
+        <audio id='loseAudio' src="audios/lose.wav"></audio>
+        <div class="title">
+            <h1>Press space bar to start!</h1>
+        </div>
+        <div class="game-over hide">
+            <h1>GAME OVER!</h1>
+            <H4>Press space bar to restore the game</H4>
+            <span class="final-score"></span>
+        </div>
+        <div class="points-counter hide"><span class="level">Level:</span><span class="level-number">1</span><span
+                class="points"> points:</span> <span class="points-number">0</span></div>
+        <div class="border-canvas">
+            <canvas width="400px" height="400px"></canvas>
+        </div>
+        <div class="truchendo-conteiner"><span class="truchendo">truchendo</span><span class="pibe">PIBECONSOLA <span
+                    class="tm">TM</span></span>
+        </div>
+        <div class="keys-container">
+            <div class="keys">
+                <div class="keyUp"><i class="fas fa-arrow-up"></i></div>
+                <div class="keyRight"><i class="fas fa-arrow-right"></i></div>
+                <div class="keyDown"><i class="fas fa-arrow-down"></i></div>
+                <div class="keyLeft"><i class="fas fa-arrow-left"></i></div>
+            </div>
+            <div class="start"><span class="start-span">START</span></div>
+            <div class="speed-buttons">
+                <div class="speedUp"><span>A</span></div>
+                <div class="speedDown"><span>B</span></div>
+            </div>
+        </div>
     </div>
 </body>
 

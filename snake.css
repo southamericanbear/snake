@@ -1,18 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+:root {
+  --eightbit: "Press Start 2P", cursive;
+}
+
 body {
-  background: black;
   text-align: center;
-  margin: 60px 0 0 0;
+  margin: 0 0 0 0;
+  background-color: rgba(245, 245, 19, 0.74);
+}
+h1,
+h4,
+.level,
+.level-number,
+.points,
+.points-number,
+.final-score {
+  font-family: var(--eightbit) !important;
+  color: rgba(45, 37, 87, 0.822);
+}
+
+.game-boy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.border-canvas {
+  border: solid 30px rgba(45, 37, 87, 0.822);
+  border-radius: 10px;
+  border-bottom-right-radius: 35px;
+  width: 400px;
+  height: 400px;
 }
 
 canvas {
-  background: purple;
-  border: solid 2px white;
+  background: rgba(160, 197, 160, 0.808);
 }
 
-h1,
-.points-counter,
-.level-counter {
-  color: white;
+.truchendo-conteiner {
+  width: 35%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.truchendo {
+  font-family: var(--eightbit);
+  margin-right: 10px;
+}
+
+.pibe {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.tm {
+  font-style: normal;
+  font-size: 0.5rem;
 }
 
 .points-counter,
@@ -23,39 +72,199 @@ h1 {
 
 .game-over :is(h1, h4) {
   color: red;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  margin: 25px 0;
+  margin: 0;
 }
 
 .game-over :is(h1) {
   font-weight: 800;
+  padding-top: 15px;
 }
 
 .game-over :is(h4) {
   font-weight: 500;
-  color: white;
+  color: rgba(45, 37, 87, 0.822);
+  padding: 5px 0 5px 0;
+}
+
+.final-score {
+  padding: 10px 10px !important;
 }
 
 .hide {
   display: none;
 }
 
-.keys {
+.keys-container {
   display: none;
 }
 
-@media (max-width: 1000px) {
+.speedUp,
+.speedDown {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+@media (max-width: 360px) {
+  .border-canvas {
+    height: 252px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .border-canvas {
+    height: 263px !important;
+  }
+}
+
+@media (max-width: 750px) {
+  body {
+    margin: 0;
+    max-width: 100%;
+  }
+  .border-canvas {
+    max-width: 70%;
+    height: 288px;
+  }
   canvas {
-    width: 70%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     display: block;
   }
 
-  .keys {
+  .truchendo-conteiner {
+    padding: 0;
+    margin-top: 25px;
+  }
+
+  .truchendo {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1026px) {
+  .truchendo-conteiner {
+    width: 90%;
+  }
+
+  .keys-container {
     display: flex;
+    justify-content: center;
+  }
+
+  .start {
     color: white;
-    border: solid red 1px;
-    justify-content: space-between;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 5%;
+  }
+
+  .start span {
+    background: rgba(45, 37, 87, 0.822);
+    border-radius: 50px;
+    padding: 5px 10px;
+    font-weight: 600;
+    font-size: 0.7rem;
+  }
+
+  .speed-buttons {
+    width: 20%;
+    display: grid;
+    grid-template-rows: 10px 10px;
+    grid-template-rows: 10px 10px;
+    grid-template-areas:
+      "a . . ."
+      ". . b ."
+      ". . . .";
+    align-content: center;
+    justify-content: space-around;
+  }
+
+  .speedUp {
+    grid-area: a;
+  }
+
+  .speedDown {
+    grid-area: b;
+  }
+  .speedUp,
+  .speedDown {
+    background: rgba(45, 37, 87, 0.822);
+    border-radius: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    width: 20px;
+    height: 20px;
+    color: white;
+  }
+
+  .keyUp {
+    grid-area: up;
+  }
+
+  .keyRight {
+    grid-area: right;
+  }
+
+  .keyDown {
+    grid-area: down;
+  }
+
+  .keyLeft {
+    grid-area: left;
+  }
+  .start {
+    width: 31.33%;
+  }
+
+  .keys {
+    display: grid;
+    grid-template-columns: 50px 50px;
+    grid-template-rows: auto;
+    grid-template-areas:
+      ". up . ."
+      "left . right ."
+      ". down . ."
+      ". . . .";
+    justify-content: center;
+    color: white;
+    width: 31.33%;
+    height: 200px;
+    margin: 15px 0;
+  }
+
+  .keys div {
+    background: rgba(45, 37, 87, 0.822);
+    border-radius: 70px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .keyUp,
+  .keyDown,
+  .keyRight,
+  .keyLeft,
+  .start-span,
+  .speedUp,
+  .speedDown {
+    transition: 0.2s all;
+  }
+
+  .keyUp:hover,
+  .keyDown:hover,
+  .keyRight:hover,
+  .keyLeft:hover,
+  .start-span:hover,
+  .speedUp:hover,
+  .speedDown:hover {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
   }
 }
